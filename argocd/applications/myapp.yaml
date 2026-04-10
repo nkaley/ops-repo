@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: myapp
+  namespace: argocd
+spec:
+  project: default
+
+  sources:
+    - repoURL: https://github.com/nkaley/app-repo.git
+      targetRevision: main
+      path: .helm
+      helm:
+        valueFiles:
+          - $values/values/myapp/dev.yaml
+
+    - repoURL: https://github.com/nkaley/ops-repo.git
+      targetRevision: main
+      ref: values
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: myapp
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

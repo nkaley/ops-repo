@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: postgres
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://charts.bitnami.com/bitnami
+    chart: postgresql
+    targetRevision: 16.7.27
+    helm:
+      values: |
+        image:
+          registry: docker.io
+          repository: bitnamilegacy/postgresql
+          tag: 17.6.0-debian-12-r4
+
+        auth:
+          username: postgres
+          password: postgres
+          database: myapp
+
+        primary:
+          persistence:
+            enabled: false
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: myapp
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
