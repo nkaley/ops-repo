@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/nkaley/ops-repo.git
     targetRevision: main
-    path: argocd/servicemonitors
+    path: argocd/extras
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
@@ -18,3 +18,4 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+      - ServerSideApply=true

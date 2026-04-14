@@ -1,0 +1,42 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: myapp-alerts
+  namespace: monitoring
+  labels:
+    release: monitoring
+spec:
+  groups:
+    - name: myapp.rules
+      rules:
+        - alert: MyAppDown
+          expr: up{job=~".*myapp.*"} == 0
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "myapp недоступен"
+
+        - alert: MyAppHighErrorRate
+          expr: rate(http_request_errors_total[5m]) > 0
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: "есть ошибки в myapp"
+
+        - alert: MyAppHighLatency
+          expr: (rate(http_request_latency_seconds_sum[5m]) / rate(http_request_latency_seconds_count[5m])) > 0.5
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "высокая latency у myapp"
+
+        - alert: MyAppPodNotReady
+          expr: kube_pod_status_ready{namespace="myapp", condition="true", pod=~"myapp-.*"} == 0
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: "pod myapp не ready"
