@@ -10,7 +10,7 @@ spec:
     - name: myapp.rules
       rules:
         - alert: MyAppDown
-          expr: up{job=~".*myapp.*"} == 0
+          expr: absent(up{job="myapp", namespace="myapp", service="myapp"})
           for: 1m
           labels:
             severity: critical
