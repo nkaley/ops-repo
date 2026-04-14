@@ -16,3 +16,20 @@ prometheus:
   prometheusSpec:
     serviceMonitorSelectorNilUsesHelmValues: false
     podMonitorSelectorNilUsesHelmValues: false
+
+alertmanager:
+  enabled: true
+  config:
+    global:
+      resolve_timeout: 5m
+    route:
+      receiver: telegram
+      group_wait: 10s
+      group_interval: 30s
+      repeat_interval: 1h
+    receivers:
+      - name: telegram
+        telegram_configs:
+          - bot_token: "<TELEGRAM_BOT_TOKEN>"
+            chat_id: <TELEGRAM_CHAT_ID>
+            send_resolved: true
