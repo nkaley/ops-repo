@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/nkaley/app-repo
-  tag: sha-18d5f26
+  tag: sha-d4ef836
   pullPolicy: IfNotPresent
 
 service:
