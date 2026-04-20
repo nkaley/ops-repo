@@ -10,7 +10,7 @@ spec:
     - name: vault.rules
       rules:
         - alert: VaultSealed
-          expr: vault_core_unsealed == 0 or up{job=~"vault|vault-ui|vault-internal"} == 0
+          expr: max(vault_core_unsealed) == 0 or min(up{job=~"vault|vault-ui|vault-internal"}) == 0
           for: 1m
           labels:
             severity: critical
