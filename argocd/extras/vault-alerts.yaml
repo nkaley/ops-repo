@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: vault-alerts
+  namespace: monitoring
+spec:
+  groups:
+    - name: vault.rules
+      rules:
+        - alert: VaultSealed
+          expr: vault_core_unsealed == 0
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: Vault is sealed

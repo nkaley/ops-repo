@@ -21,3 +21,6 @@ alertmanager:
   enabled: true
   alertmanagerSpec:
     configSecret: alertmanager-telegram-config
+
+defaultRules:
+  create: false
