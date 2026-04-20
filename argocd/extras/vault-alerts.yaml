@@ -3,14 +3,16 @@ kind: PrometheusRule
 metadata:
   name: vault-alerts
   namespace: monitoring
+  labels:
+    release: monitoring
 spec:
   groups:
     - name: vault.rules
       rules:
         - alert: VaultSealed
-          expr: vault_core_unsealed == 0
+          expr: vault_core_unsealed == 0 or up{job=~"vault|vault-ui|vault-internal"} == 0
           for: 1m
           labels:
             severity: critical
           annotations:
-            summary: Vault is sealed
+            summary: Vault is sealed or unavailable
