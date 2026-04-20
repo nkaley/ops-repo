@@ -11,14 +11,20 @@ spec:
       - vault
   selector:
     matchLabels:
-      app.kubernetes.io/name: vault
+      app.kubernetes.io/instance: vault
   endpoints:
     - port: http
       path: /v1/sys/metrics
       interval: 30s
+
       params:
         format:
           - prometheus
-      bearerTokenSecret:
-        name: vault-metrics-token
-        key: token
+
+      scheme: http
+
+      authorization:
+        type: Bearer
+        credentials:
+          name: vault-metrics-token
+          key: token
